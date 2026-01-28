@@ -3,96 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard de Macros - Balance Semanal</title>
+    <title>Dashboard de Macros - Auditoría Diaria</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;700;900&display=swap');
+
         body {
-            background-color: #f1f5f9;
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+            font-family: 'Inter', sans-serif;
         }
+
+        .font-cyber {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .text-lime { color: #d9f99d; }
+        .text-turquoise { color: #40e0d0; }
+        .text-cyan { color: #22d3ee; }
+        .text-violet { color: #a78bfa; }
+
         .chart-container {
             position: relative;
-            height: 350px;
+            height: 400px;
             width: 100%;
         }
-        .card {
-            background: white;
-            border-radius: 1.25rem;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s;
-        }
-        .card:hover {
-            transform: translateY(-2px);
-        }
-        .gradient-blue { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); }
-        .gradient-green { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
-        .gradient-amber { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
     </style>
 </head>
-<body class="p-4 md:p-6">
+<body class="p-4 md:p-8">
     <div class="max-w-5xl mx-auto">
-        <!-- Header -->
-        <header class="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <!-- Header con Datos Fijos -->
+        <header class="mb-10 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
             <div>
-                <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">Balance Semanal de Macros</h1>
-                <p class="text-slate-500 font-medium">Usuario: 68.2 kg | Músculo: 28.6 kg</p>
+                <h1 class="text-4xl font-black font-cyber tracking-widest uppercase text-turquoise italic">
+                    Auditoría <span class="text-lime">Macros</span>
+                </h1>
+                <p class="text-slate-400 font-medium mt-2">OBJETIVO: 110G PROTEÍNA | CONTROL GRASA VISCERAL</p>
             </div>
-            <div class="flex gap-2">
-                <span class="px-3 py-1 bg-white border border-slate-200 rounded-full text-xs font-bold text-slate-600 shadow-sm">Martes 27 Ene</span>
-                <span class="px-3 py-1 bg-blue-100 border border-blue-200 rounded-full text-xs font-bold text-blue-700 shadow-sm italic">Estado: Recuperación</span>
+            <div class="flex gap-3">
+                <div class="px-4 py-2 bg-slate-800 rounded-xl border border-slate-700 text-xs font-bold text-cyan font-cyber">
+                    MARTES 27 ENE
+                </div>
             </div>
         </header>
 
-        <!-- Key Metrics Grid -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-            <div class="card p-6 border-l-8 border-blue-500">
-                <div class="flex justify-between items-start mb-2">
-                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Calorías Hoy</p>
-                    <span class="text-blue-500 bg-blue-50 p-1 rounded-lg">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                        </svg>
-                    </span>
+        <!-- Métricas de Auditoría -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+            <div class="card p-6 border-b-4 border-cyan">
+                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-1">Estado Calórico Hoy</p>
+                <div class="flex items-baseline gap-2">
+                    <p class="text-4xl font-black text-cyan font-cyber">DÉFICIT</p>
                 </div>
-                <p class="text-3xl font-black text-slate-800">1,500 <span class="text-lg font-normal text-slate-400">kcal</span></p>
-                <p class="text-sm text-blue-600 font-semibold mt-1">Déficit estratégico activo</p>
+                <div class="mt-4 flex justify-between text-xs font-bold uppercase">
+                    <span class="text-slate-400">Consumo:</span>
+                    <span class="text-cyan">1,500 kcal</span>
+                </div>
             </div>
 
-            <div class="card p-6 border-l-8 border-green-500">
-                <div class="flex justify-between items-start mb-2">
-                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Proteína Promedio</p>
-                    <span class="text-green-500 bg-green-50 p-1 rounded-lg">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                        </svg>
-                    </span>
+            <div class="card p-6 border-b-4 border-lime">
+                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-1">Proteína Hoy</p>
+                <div class="flex items-baseline gap-2">
+                    <p class="text-4xl font-black text-lime font-cyber">87</p>
+                    <span class="text-slate-500 text-sm">G</span>
                 </div>
-                <p class="text-3xl font-black text-slate-800">101.5 <span class="text-lg font-normal text-slate-400">g</span></p>
-                <p class="text-sm text-green-600 font-semibold mt-1">Músculo protegido</p>
+                <div class="mt-4 flex justify-between text-xs font-bold uppercase">
+                    <span class="text-slate-400">Faltante meta:</span>
+                    <span class="text-rose-400">23g</span>
+                </div>
             </div>
 
-            <div class="card p-6 border-l-8 border-amber-500 sm:col-span-2 lg:col-span-1">
-                <div class="flex justify-between items-start mb-2">
-                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Fuerza Mañana</p>
-                    <span class="text-amber-500 bg-amber-50 p-1 rounded-lg">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                        </svg>
-                    </span>
+            <div class="card p-6 border-b-4 border-violet sm:col-span-2 lg:col-span-1">
+                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-1">Masa Crítica</p>
+                <div class="flex items-baseline gap-2">
+                    <p class="text-4xl font-black text-violet font-cyber">28.6</p>
+                    <span class="text-slate-500 text-sm">KG</span>
                 </div>
-                <p class="text-3xl font-black text-slate-800">Alta <span class="text-lg font-normal text-slate-400">Intensidad</span></p>
-                <p class="text-sm text-amber-600 font-semibold mt-1">Glucógeno listo (Papa/Arroz)</p>
+                <div class="mt-4 flex justify-between text-xs font-bold uppercase">
+                    <span class="text-slate-400">Tejido Muscular:</span>
+                    <span class="text-violet">Estable</span>
+                </div>
             </div>
         </div>
 
-        <!-- Chart Section -->
-        <div class="card p-6 mb-8">
-            <div class="flex items-center justify-between mb-6">
-                <h2 class="text-xl font-bold text-slate-800 italic">Tendencia Semanal</h2>
-                <div class="flex gap-4 text-xs font-bold uppercase tracking-tighter">
-                    <span class="flex items-center text-blue-500"><span class="w-3 h-3 bg-blue-500 rounded-full mr-1 opacity-40"></span> Calorías</span>
-                    <span class="flex items-center text-green-500"><span class="w-3 h-3 bg-green-500 rounded-full mr-1"></span> Proteína</span>
+        <!-- Gráfica de Auditoría Semanal -->
+        <div class="card p-8 mb-10">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+                <h2 class="text-xl font-bold text-turquoise italic font-cyber tracking-tight">Historial de Cumplimiento</h2>
+                <div class="flex gap-6 text-[10px] font-black uppercase">
+                    <div class="flex items-center gap-2">
+                        <div class="w-4 h-1 bg-cyan"></div>
+                        <span class="text-cyan">Energía (Calorías)</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-4 h-1 bg-lime"></div>
+                        <span class="text-lime">Proteína (Objetivo 110g)</span>
+                    </div>
                 </div>
             </div>
             <div class="chart-container">
@@ -100,52 +113,69 @@
             </div>
         </div>
 
-        <!-- Plan Section -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pb-12">
-            <div class="card p-6 bg-slate-900 text-white">
-                <h2 class="text-xl font-bold mb-4 flex items-center">
-                    <span class="mr-2">🚀</span> Plan Miércoles 28
-                </h2>
-                <div class="space-y-4">
-                    <div class="border-l-2 border-blue-400 pl-4 py-1">
-                        <p class="text-xs text-blue-300 font-bold uppercase">Desayuno Compensatorio</p>
-                        <p class="text-sm text-slate-300">Sumar <strong>Queso Cottage y Jocoque</strong> para recuperar los 23g de proteína faltantes hoy.</p>
-                    </div>
-                    <div class="border-l-2 border-green-400 pl-4 py-1">
-                        <p class="text-xs text-green-300 font-bold uppercase">Entrenamiento</p>
-                        <p class="text-sm text-slate-300">Intensidad con mancuernas de <strong>35 lb</strong>. Ventana: 9:30 AM o 4:00 PM.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card p-6 border border-slate-200">
-                <h2 class="text-xl font-bold text-slate-800 mb-4 flex items-center">
-                    <span class="mr-2">💡</span> Tip de Recuperación
-                </h2>
-                <p class="text-slate-600 text-sm leading-relaxed mb-4">
-                    Hoy cerramos con un <strong>déficit de ~500 kcal</strong>. Esto fuerza al cuerpo a atacar la grasa visceral. Para que esto no afecte tu músculo, el descanso de hoy a las <strong>11:00 PM</strong> es innegociable.
-                </p>
-                <div class="bg-slate-50 p-3 rounded-lg flex items-center gap-3">
-                    <div class="text-2xl text-slate-400 font-black">28.6</div>
-                    <div class="text-[10px] text-slate-500 font-bold uppercase leading-tight">Kg de masa muscular<br>bajo protección</div>
-                </div>
-            </div>
+        <!-- Tabla de Verificación Rápida -->
+        <div class="card overflow-hidden">
+            <table class="w-full text-left text-xs md:text-sm">
+                <thead class="bg-slate-800/50 text-slate-400 uppercase font-cyber text-[10px]">
+                    <tr>
+                        <th class="p-4">Día</th>
+                        <th class="p-4">Calorías</th>
+                        <th class="p-4 text-center">Balance Calórico</th>
+                        <th class="p-4">Proteína</th>
+                        <th class="p-4 text-center">Cumplimiento</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-700">
+                    <tr>
+                        <td class="p-4 font-bold">Sáb 24</td>
+                        <td class="p-4 text-cyan">1,850</td>
+                        <td class="p-4 text-center"><span class="px-2 py-1 rounded bg-cyan/10 text-cyan">DÉFICIT</span></td>
+                        <td class="p-4 text-lime">110g</td>
+                        <td class="p-4 text-center text-lime font-bold">100%</td>
+                    </tr>
+                    <tr>
+                        <td class="p-4 font-bold">Dom 25</td>
+                        <td class="p-4 text-cyan">1,700</td>
+                        <td class="p-4 text-center"><span class="px-2 py-1 rounded bg-cyan/10 text-cyan">DÉFICIT</span></td>
+                        <td class="p-4 text-lime">95g</td>
+                        <td class="p-4 text-center text-amber-400 font-bold">86%</td>
+                    </tr>
+                    <tr>
+                        <td class="p-4 font-bold">Lun 26</td>
+                        <td class="p-4 text-violet">2,105</td>
+                        <td class="p-4 text-center"><span class="px-2 py-1 rounded bg-violet/10 text-violet">SUPERÁVIT</span></td>
+                        <td class="p-4 text-lime">114g</td>
+                        <td class="p-4 text-center text-lime font-bold">103%</td>
+                    </tr>
+                    <tr class="bg-slate-800/20">
+                        <td class="p-4 font-bold text-turquoise">Mar 27</td>
+                        <td class="p-4 text-cyan">1,500</td>
+                        <td class="p-4 text-center"><span class="px-2 py-1 rounded bg-cyan/10 text-cyan font-black">DÉFICIT ALTO</span></td>
+                        <td class="p-4 text-lime">87g</td>
+                        <td class="p-4 text-center text-rose-400 font-bold">79%</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
     <script>
         const ctx = document.getElementById('macrosChart').getContext('2d');
         
+        const barGradient = ctx.createLinearGradient(0, 0, 0, 400);
+        barGradient.addColorStop(0, 'rgba(34, 211, 238, 0.4)');
+        barGradient.addColorStop(1, 'rgba(34, 211, 238, 0.05)');
+
         const data = {
-            labels: ['Sáb 24', 'Dom 25', 'Lun 26', 'Mar 27 (Hoy)'],
+            labels: ['Sáb 24', 'Dom 25', 'Lun 26', 'Mar 27'],
             datasets: [
                 {
                     label: 'Calorías (kcal)',
                     data: [1850, 1700, 2105, 1500],
-                    backgroundColor: 'rgba(59, 130, 246, 0.4)',
-                    borderColor: 'rgb(59, 130, 246)',
-                    borderWidth: 0,
-                    borderRadius: 12,
+                    backgroundColor: barGradient,
+                    borderColor: '#22d3ee',
+                    borderWidth: 2,
+                    borderRadius: 10,
                     yAxisID: 'y',
                     type: 'bar',
                     order: 2
@@ -153,15 +183,14 @@
                 {
                     label: 'Proteína (g)',
                     data: [110, 95, 114, 87],
-                    borderColor: 'rgb(34, 197, 94)',
-                    backgroundColor: 'rgb(34, 197, 94)',
+                    borderColor: '#d9f99d',
+                    backgroundColor: '#d9f99d',
                     borderWidth: 4,
                     pointRadius: 6,
-                    pointBackgroundColor: '#ffffff',
-                    pointBorderWidth: 3,
+                    pointBackgroundColor: '#0f172a',
                     type: 'line',
                     yAxisID: 'y1',
-                    tension: 0.4,
+                    tension: 0.2,
                     order: 1
                 }
             ]
@@ -176,41 +205,33 @@
                     legend: { display: false },
                     tooltip: {
                         backgroundColor: '#1e293b',
-                        padding: 12,
-                        cornerRadius: 12,
-                        titleFont: { size: 14, weight: 'bold' },
-                        callbacks: {
-                            label: function(context) {
-                                let label = context.dataset.label || '';
-                                if (label) { label += ': '; }
-                                if (context.parsed.y !== null) {
-                                    label += context.parsed.y + (context.datasetIndex === 0 ? ' kcal' : ' g');
-                                }
-                                return label;
-                            }
-                        }
+                        titleFont: { family: 'Orbitron' },
+                        padding: 15,
+                        cornerRadius: 10,
+                        borderColor: 'rgba(255,255,255,0.1)',
+                        borderWidth: 1
                     }
                 },
                 scales: {
                     y: {
                         beginAtZero: false,
-                        min: 1200,
-                        max: 2300,
+                        min: 1000,
+                        max: 2500,
                         position: 'left',
-                        grid: { color: 'rgba(0,0,0,0.03)' },
-                        ticks: { color: '#94a3b8', font: { size: 11 } }
+                        grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                        ticks: { color: '#64748b' }
                     },
                     y1: {
                         beginAtZero: false,
-                        min: 70,
+                        min: 60,
                         max: 130,
                         position: 'right',
                         grid: { display: false },
-                        ticks: { color: '#10b981', font: { size: 11, weight: 'bold' } }
+                        ticks: { color: '#d9f99d' }
                     },
                     x: {
                         grid: { display: false },
-                        ticks: { color: '#64748b', font: { size: 12, weight: '500' } }
+                        ticks: { color: '#94a3b8', font: { weight: 'bold' } }
                     }
                 }
             }
