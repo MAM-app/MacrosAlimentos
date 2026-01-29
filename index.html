@@ -3,241 +3,217 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard de Macros - Auditoría Diaria</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Infografía de Rendimiento Semanal</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;700;900&display=swap');
+        :root {
+            --bg-body: #05070a;
+            --bg-card: #0d1117;
+            --azul-rey: #0047ab;
+            --cobalto: #002e63;
+            --turquesa: #40e0d0;
+            --cyan: #00ffff;
+            --text-primary: #f0f6fc;
+            --text-secondary: #8b949e;
+        }
 
         body {
-            background-color: #0f172a;
-            color: #f8fafc;
-            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-primary);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
         }
 
-        .font-cyber {
-            font-family: 'Orbitron', sans-serif;
-        }
-
-        .card {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(10px);
-            border-radius: 1.5rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .text-lime { color: #d9f99d; }
-        .text-turquoise { color: #40e0d0; }
-        .text-cyan { color: #22d3ee; }
-        .text-violet { color: #a78bfa; }
-
-        .chart-container {
-            position: relative;
-            height: 400px;
+        .container {
             width: 100%;
+            max-width: 600px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(180deg, var(--cobalto) 0%, transparent 100%);
+            border-radius: 15px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            color: var(--cyan);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .header p {
+            color: var(--turquesa);
+            margin: 10px 0 0;
+            font-weight: 300;
+        }
+
+        .main-stat {
+            display: flex;
+            justify-content: space-between;
+            background: var(--bg-card);
+            border: 1px solid var(--azul-rey);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0, 71, 171, 0.2);
+        }
+
+        .stat-box { text-align: center; flex: 1; }
+        .stat-box:not(:last-child) { border-right: 1px solid var(--cobalto); }
+        .stat-box small { color: var(--text-secondary); display: block; font-size: 0.7rem; text-transform: uppercase; }
+        .stat-box span { color: var(--cyan); font-size: 1.4rem; font-weight: bold; }
+
+        .timeline { position: relative; padding-left: 20px; }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--cobalto);
+        }
+
+        .day-entry {
+            position: relative;
+            background: var(--bg-card);
+            margin-bottom: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 71, 171, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .day-entry:hover {
+            border-color: var(--cyan);
+            transform: translateX(5px);
+        }
+
+        .day-entry::before {
+            content: '';
+            position: absolute;
+            left: -26px;
+            top: 20px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--azul-rey);
+            border: 2px solid var(--cyan);
+        }
+
+        .day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .day-title { color: var(--turquesa); font-weight: bold; margin: 0; }
+        
+        .badge {
+            font-size: 0.7rem;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .badge-deficit { background: rgba(0, 255, 255, 0.15); color: var(--cyan); border: 1px solid var(--cyan); }
+        .badge-surplus { background: rgba(0, 71, 161, 0.3); color: var(--azul-rey); border: 1px solid var(--azul-rey); }
+        .badge-neutral { background: rgba(139, 148, 158, 0.1); color: var(--text-secondary); border: 1px solid var(--text-secondary); }
+
+        .details { font-size: 0.85rem; color: var(--text-secondary); margin: 0; }
+        .protein-tag { color: var(--cyan); font-weight: bold; }
+
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--cobalto);
+            padding-top: 20px;
         }
     </style>
 </head>
-<body class="p-4 md:p-8">
-    <div class="max-w-5xl mx-auto">
-        <!-- Header con Datos Fijos -->
-        <header class="mb-10 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
-            <div>
-                <h1 class="text-4xl font-black font-cyber tracking-widest uppercase text-turquoise italic">
-                    Auditoría <span class="text-lime">Macros</span>
-                </h1>
-                <p class="text-slate-400 font-medium mt-2">OBJETIVO: 110G PROTEÍNA | CONTROL GRASA VISCERAL</p>
-            </div>
-            <div class="flex gap-3">
-                <div class="px-4 py-2 bg-slate-800 rounded-xl border border-slate-700 text-xs font-bold text-cyan font-cyber">
-                    MARTES 27 ENE
-                </div>
-            </div>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Rendimiento Semanal</h1>
+            <p>Monitoreo de Grasa Visceral y Masa Muscular</p>
         </header>
 
-        <!-- Métricas de Auditoría -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
-            <div class="card p-6 border-b-4 border-cyan">
-                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-1">Estado Calórico Hoy</p>
-                <div class="flex items-baseline gap-2">
-                    <p class="text-4xl font-black text-cyan font-cyber">DÉFICIT</p>
-                </div>
-                <div class="mt-4 flex justify-between text-xs font-bold uppercase">
-                    <span class="text-slate-400">Consumo:</span>
-                    <span class="text-cyan">1,500 kcal</span>
-                </div>
+        <div class="main-stat">
+            <div class="stat-box">
+                <small>Peso Promedio</small>
+                <span>68.2 kg</span>
             </div>
-
-            <div class="card p-6 border-b-4 border-lime">
-                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-1">Proteína Hoy</p>
-                <div class="flex items-baseline gap-2">
-                    <p class="text-4xl font-black text-lime font-cyber">87</p>
-                    <span class="text-slate-500 text-sm">G</span>
-                </div>
-                <div class="mt-4 flex justify-between text-xs font-bold uppercase">
-                    <span class="text-slate-400">Faltante meta:</span>
-                    <span class="text-rose-400">23g</span>
-                </div>
+            <div class="stat-box">
+                <small>Déficit Neto</small>
+                <span>-700 kcal</span>
             </div>
-
-            <div class="card p-6 border-b-4 border-violet sm:col-span-2 lg:col-span-1">
-                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-1">Masa Crítica</p>
-                <div class="flex items-baseline gap-2">
-                    <p class="text-4xl font-black text-violet font-cyber">28.6</p>
-                    <span class="text-slate-500 text-sm">KG</span>
-                </div>
-                <div class="mt-4 flex justify-between text-xs font-bold uppercase">
-                    <span class="text-slate-400">Tejido Muscular:</span>
-                    <span class="text-violet">Estable</span>
-                </div>
+            <div class="stat-box">
+                <small>Estado</small>
+                <span style="color: var(--turquesa);">Óptimo</span>
             </div>
         </div>
 
-        <!-- Gráfica de Auditoría Semanal -->
-        <div class="card p-8 mb-10">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-                <h2 class="text-xl font-bold text-turquoise italic font-cyber tracking-tight">Historial de Cumplimiento</h2>
-                <div class="flex gap-6 text-[10px] font-black uppercase">
-                    <div class="flex items-center gap-2">
-                        <div class="w-4 h-1 bg-cyan"></div>
-                        <span class="text-cyan">Energía (Calorías)</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <div class="w-4 h-1 bg-lime"></div>
-                        <span class="text-lime">Proteína (Objetivo 110g)</span>
-                    </div>
+        <div class="timeline">
+            <!-- Sábado -->
+            <div class="day-entry">
+                <div class="day-header">
+                    <p class="day-title">Sábado 24/01</p>
+                    <span class="badge badge-deficit">Déficit</span>
                 </div>
+                <p class="details">Entrenamiento pesado (E1). Gasto calórico elevado por intensidad de 35lb.</p>
             </div>
-            <div class="chart-container">
-                <canvas id="macrosChart"></canvas>
+
+            <!-- Domingo -->
+            <div class="day-entry">
+                <div class="day-header">
+                    <p class="day-title">Domingo 25/01</p>
+                    <span class="badge badge-deficit">Déficit</span>
+                </div>
+                <p class="details">Reposo absoluto por malestar. Ingesta reducida espontáneamente.</p>
+            </div>
+
+            <!-- Lunes -->
+            <div class="day-entry">
+                <div class="day-header">
+                    <p class="day-title">Lunes 26/01</p>
+                    <span class="badge badge-surplus">Superávit</span>
+                </div>
+                <p class="details">Recuperación estratégica. <span class="protein-tag">Proteína: 114g</span>.</p>
+            </div>
+
+            <!-- Martes -->
+            <div class="day-entry">
+                <div class="day-header">
+                    <p class="day-title">Martes 27/01</p>
+                    <span class="badge badge-neutral">Mantenimiento</span>
+                </div>
+                <p class="details">Enfoque en salud de garganta. <span class="protein-tag">Proteína: 114g</span>.</p>
+            </div>
+
+            <!-- Miércoles -->
+            <div class="day-entry" style="border-color: var(--cyan);">
+                <div class="day-header">
+                    <p class="day-title" style="color: var(--cyan);">Miércoles 28/01 (Hoy)</p>
+                    <span class="badge badge-deficit">Déficit</span>
+                </div>
+                <p class="details">Entrenamiento H1 completado. Ingesta récord de <span class="protein-tag">148g de proteína</span>.</p>
             </div>
         </div>
 
-        <!-- Tabla de Verificación Rápida -->
-        <div class="card overflow-hidden">
-            <table class="w-full text-left text-xs md:text-sm">
-                <thead class="bg-slate-800/50 text-slate-400 uppercase font-cyber text-[10px]">
-                    <tr>
-                        <th class="p-4">Día</th>
-                        <th class="p-4">Calorías</th>
-                        <th class="p-4 text-center">Balance Calórico</th>
-                        <th class="p-4">Proteína</th>
-                        <th class="p-4 text-center">Cumplimiento</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-slate-700">
-                    <tr>
-                        <td class="p-4 font-bold">Sáb 24</td>
-                        <td class="p-4 text-cyan">1,850</td>
-                        <td class="p-4 text-center"><span class="px-2 py-1 rounded bg-cyan/10 text-cyan">DÉFICIT</span></td>
-                        <td class="p-4 text-lime">110g</td>
-                        <td class="p-4 text-center text-lime font-bold">100%</td>
-                    </tr>
-                    <tr>
-                        <td class="p-4 font-bold">Dom 25</td>
-                        <td class="p-4 text-cyan">1,700</td>
-                        <td class="p-4 text-center"><span class="px-2 py-1 rounded bg-cyan/10 text-cyan">DÉFICIT</span></td>
-                        <td class="p-4 text-lime">95g</td>
-                        <td class="p-4 text-center text-amber-400 font-bold">86%</td>
-                    </tr>
-                    <tr>
-                        <td class="p-4 font-bold">Lun 26</td>
-                        <td class="p-4 text-violet">2,105</td>
-                        <td class="p-4 text-center"><span class="px-2 py-1 rounded bg-violet/10 text-violet">SUPERÁVIT</span></td>
-                        <td class="p-4 text-lime">114g</td>
-                        <td class="p-4 text-center text-lime font-bold">103%</td>
-                    </tr>
-                    <tr class="bg-slate-800/20">
-                        <td class="p-4 font-bold text-turquoise">Mar 27</td>
-                        <td class="p-4 text-cyan">1,500</td>
-                        <td class="p-4 text-center"><span class="px-2 py-1 rounded bg-cyan/10 text-cyan font-black">DÉFICIT ALTO</span></td>
-                        <td class="p-4 text-lime">87g</td>
-                        <td class="p-4 text-center text-rose-400 font-bold">79%</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+        <footer class="footer">
+            <p>Objetivo: Desinflamación de amígdala y entrenamiento P1 mañana.</p>
+            <p style="color: var(--cyan);">Enfoque: Grasas saludables y líquidos al tiempo.</p>
+        </footer>
     </div>
-
-    <script>
-        const ctx = document.getElementById('macrosChart').getContext('2d');
-        
-        const barGradient = ctx.createLinearGradient(0, 0, 0, 400);
-        barGradient.addColorStop(0, 'rgba(34, 211, 238, 0.4)');
-        barGradient.addColorStop(1, 'rgba(34, 211, 238, 0.05)');
-
-        const data = {
-            labels: ['Sáb 24', 'Dom 25', 'Lun 26', 'Mar 27'],
-            datasets: [
-                {
-                    label: 'Calorías (kcal)',
-                    data: [1850, 1700, 2105, 1500],
-                    backgroundColor: barGradient,
-                    borderColor: '#22d3ee',
-                    borderWidth: 2,
-                    borderRadius: 10,
-                    yAxisID: 'y',
-                    type: 'bar',
-                    order: 2
-                },
-                {
-                    label: 'Proteína (g)',
-                    data: [110, 95, 114, 87],
-                    borderColor: '#d9f99d',
-                    backgroundColor: '#d9f99d',
-                    borderWidth: 4,
-                    pointRadius: 6,
-                    pointBackgroundColor: '#0f172a',
-                    type: 'line',
-                    yAxisID: 'y1',
-                    tension: 0.2,
-                    order: 1
-                }
-            ]
-        };
-
-        const config = {
-            data: data,
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        backgroundColor: '#1e293b',
-                        titleFont: { family: 'Orbitron' },
-                        padding: 15,
-                        cornerRadius: 10,
-                        borderColor: 'rgba(255,255,255,0.1)',
-                        borderWidth: 1
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: false,
-                        min: 1000,
-                        max: 2500,
-                        position: 'left',
-                        grid: { color: 'rgba(255, 255, 255, 0.05)' },
-                        ticks: { color: '#64748b' }
-                    },
-                    y1: {
-                        beginAtZero: false,
-                        min: 60,
-                        max: 130,
-                        position: 'right',
-                        grid: { display: false },
-                        ticks: { color: '#d9f99d' }
-                    },
-                    x: {
-                        grid: { display: false },
-                        ticks: { color: '#94a3b8', font: { weight: 'bold' } }
-                    }
-                }
-            }
-        };
-
-        new Chart(ctx, config);
-    </script>
 </body>
 </html>
