@@ -3,23 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Infografía de Rendimiento Semanal</title>
+    <title>Dashboard Fitness Avanzado</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            --bg-body: #05070a;
-            --bg-card: #0d1117;
+            --bg-dark: #05070a;
+            --card-bg: #0d1117;
             --azul-rey: #0047ab;
             --cobalto: #002e63;
             --turquesa: #40e0d0;
             --cyan: #00ffff;
-            --text-primary: #f0f6fc;
-            --text-secondary: #8b949e;
+            --text-main: #f0f6fc;
+            --text-dim: #8b949e;
         }
 
         body {
-            background-color: var(--bg-body);
-            color: var(--text-primary);
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
             margin: 0;
             padding: 20px;
             display: flex;
@@ -28,192 +29,261 @@
 
         .container {
             width: 100%;
-            max-width: 600px;
+            max-width: 800px;
         }
 
-        .header {
+        header {
             text-align: center;
             margin-bottom: 30px;
             padding: 20px;
-            background: linear-gradient(180deg, var(--cobalto) 0%, transparent 100%);
-            border-radius: 15px;
+            border-bottom: 2px solid var(--cobalto);
         }
 
-        .header h1 {
-            margin: 0;
-            font-size: 1.8rem;
-            color: var(--cyan);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
+        h1 { color: var(--cyan); margin: 0; text-transform: uppercase; letter-spacing: 2px; }
 
-        .header p {
-            color: var(--turquesa);
-            margin: 10px 0 0;
-            font-weight: 300;
-        }
-
-        .main-stat {
-            display: flex;
-            justify-content: space-between;
-            background: var(--bg-card);
-            border: 1px solid var(--azul-rey);
+        /* Estilos de la Gráfica */
+        .chart-container {
+            background: var(--card-bg);
             padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 25px;
-            box-shadow: 0 10px 30px rgba(0, 71, 171, 0.2);
+            border-radius: 15px;
+            border: 1px solid var(--cobalto);
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
 
-        .stat-box { text-align: center; flex: 1; }
-        .stat-box:not(:last-child) { border-right: 1px solid var(--cobalto); }
-        .stat-box small { color: var(--text-secondary); display: block; font-size: 0.7rem; text-transform: uppercase; }
-        .stat-box span { color: var(--cyan); font-size: 1.4rem; font-weight: bold; }
-
-        .timeline { position: relative; padding-left: 20px; }
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background: var(--cobalto);
-        }
-
-        .day-entry {
-            position: relative;
-            background: var(--bg-card);
-            margin-bottom: 15px;
-            padding: 15px;
+        /* Acordeón */
+        .accordion {
+            width: 100%;
+            margin-bottom: 10px;
             border-radius: 8px;
-            border: 1px solid rgba(0, 71, 171, 0.3);
-            transition: all 0.3s ease;
+            overflow: hidden;
+            border: 1px solid var(--cobalto);
         }
 
-        .day-entry:hover {
-            border-color: var(--cyan);
-            transform: translateX(5px);
-        }
-
-        .day-entry::before {
-            content: '';
-            position: absolute;
-            left: -26px;
-            top: 20px;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: var(--azul-rey);
-            border: 2px solid var(--cyan);
-        }
-
-        .day-header {
+        .accordion-header {
+            background: var(--card-bg);
+            padding: 15px;
+            cursor: pointer;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
+            transition: background 0.3s;
         }
 
-        .day-title { color: var(--turquesa); font-weight: bold; margin: 0; }
-        
-        .badge {
+        .accordion-header:hover {
+            background: rgba(0, 71, 171, 0.2);
+        }
+
+        .accordion-header h3 {
+            margin: 0;
+            font-size: 1rem;
+            color: var(--turquesa);
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background: rgba(13, 17, 23, 0.5);
+        }
+
+        .content-inner {
+            padding: 15px;
+            border-top: 1px solid var(--cobalto);
+            font-size: 0.9rem;
+            color: var(--text-dim);
+        }
+
+        .content-inner strong { color: var(--cyan); }
+
+        .badge-status {
             font-size: 0.7rem;
-            padding: 4px 8px;
+            padding: 3px 8px;
             border-radius: 4px;
             font-weight: bold;
-            text-transform: uppercase;
         }
 
-        .badge-deficit { background: rgba(0, 255, 255, 0.15); color: var(--cyan); border: 1px solid var(--cyan); }
-        .badge-surplus { background: rgba(0, 71, 161, 0.3); color: var(--azul-rey); border: 1px solid var(--azul-rey); }
-        .badge-neutral { background: rgba(139, 148, 158, 0.1); color: var(--text-secondary); border: 1px solid var(--text-secondary); }
+        .deficit { color: var(--turquesa); border: 1px solid var(--turquesa); }
+        .surplus { color: var(--azul-rey); border: 1px solid var(--azul-rey); }
 
-        .details { font-size: 0.85rem; color: var(--text-secondary); margin: 0; }
-        .protein-tag { color: var(--cyan); font-weight: bold; }
+        .protein-highlight {
+            color: var(--cyan);
+            font-weight: bold;
+        }
 
-        .footer {
-            margin-top: 30px;
+        footer {
+            margin-top: 40px;
             text-align: center;
             font-size: 0.8rem;
-            color: var(--text-secondary);
-            border-top: 1px solid var(--cobalto);
-            padding-top: 20px;
+            color: var(--text-dim);
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <header class="header">
-            <h1>Rendimiento Semanal</h1>
-            <p>Monitoreo de Grasa Visceral y Masa Muscular</p>
+        <header>
+            <h1>Análisis Semanal</h1>
+            <p style="color: var(--turquesa);">Déficit Energético vs Ingesta Proteica</p>
         </header>
 
-        <div class="main-stat">
-            <div class="stat-box">
-                <small>Peso Promedio</small>
-                <span>68.2 kg</span>
-            </div>
-            <div class="stat-box">
-                <small>Déficit Neto</small>
-                <span>-700 kcal</span>
-            </div>
-            <div class="stat-box">
-                <small>Estado</small>
-                <span style="color: var(--turquesa);">Óptimo</span>
-            </div>
+        <!-- Gráfica Combinada -->
+        <div class="chart-container">
+            <canvas id="weeklyChart"></canvas>
         </div>
 
-        <div class="timeline">
+        <!-- Acordeones de Historial -->
+        <div id="history">
             <!-- Sábado -->
-            <div class="day-entry">
-                <div class="day-header">
-                    <p class="day-title">Sábado 24/01</p>
-                    <span class="badge badge-deficit">Déficit</span>
+            <div class="accordion">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <h3>Sábado 24/01</h3>
+                    <span class="badge-status deficit">Déficit</span>
                 </div>
-                <p class="details">Entrenamiento pesado (E1). Gasto calórico elevado por intensidad de 35lb.</p>
+                <div class="accordion-content">
+                    <div class="content-inner">
+                        <p><strong>Desayuno:</strong> Huevos con aguacate y café.</p>
+                        <p><strong>Comida:</strong> Pollo a la plancha con verduras.</p>
+                        <p><strong>Entrenamiento:</strong> E1 (Empuje) - Mancuernas 35lb.</p>
+                        <p><strong>Nota:</strong> Inicio de malestar general.</p>
+                    </div>
+                </div>
             </div>
 
             <!-- Domingo -->
-            <div class="day-entry">
-                <div class="day-header">
-                    <p class="day-title">Domingo 25/01</p>
-                    <span class="badge badge-deficit">Déficit</span>
+            <div class="accordion">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <h3>Domingo 25/01</h3>
+                    <span class="badge-status deficit">Déficit</span>
                 </div>
-                <p class="details">Reposo absoluto por malestar. Ingesta reducida espontáneamente.</p>
+                <div class="accordion-content">
+                    <div class="content-inner">
+                        <p><strong>Dieta:</strong> Ingesta mínima por malestar físico.</p>
+                        <p><strong>Actividad:</strong> Reposo absoluto.</p>
+                    </div>
+                </div>
             </div>
 
             <!-- Lunes -->
-            <div class="day-entry">
-                <div class="day-header">
-                    <p class="day-title">Lunes 26/01</p>
-                    <span class="badge badge-surplus">Superávit</span>
+            <div class="accordion">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <h3>Lunes 26/01</h3>
+                    <span class="badge-status surplus">Superávit</span>
                 </div>
-                <p class="details">Recuperación estratégica. <span class="protein-tag">Proteína: 114g</span>.</p>
+                <div class="accordion-content">
+                    <div class="content-inner">
+                        <p><strong>Comidas:</strong> Incremento de proteína para recuperación celular.</p>
+                        <p><strong>Proteína:</strong> 114g.</p>
+                        <p><strong>Calorías:</strong> 2,105 kcal.</p>
+                    </div>
+                </div>
             </div>
 
             <!-- Martes -->
-            <div class="day-entry">
-                <div class="day-header">
-                    <p class="day-title">Martes 27/01</p>
-                    <span class="badge badge-neutral">Mantenimiento</span>
+            <div class="accordion">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <h3>Martes 27/01</h3>
+                    <span class="badge-status">Mantenimiento</span>
                 </div>
-                <p class="details">Enfoque en salud de garganta. <span class="protein-tag">Proteína: 114g</span>.</p>
+                <div class="accordion-content">
+                    <div class="content-inner">
+                        <p><strong>Cena:</strong> Yogur griego y proteína magra.</p>
+                        <p><strong>Salud:</strong> Enfoque en hidratación para garganta.</p>
+                        <p><strong>Proteína:</strong> 114g.</p>
+                    </div>
+                </div>
             </div>
 
             <!-- Miércoles -->
-            <div class="day-entry" style="border-color: var(--cyan);">
-                <div class="day-header">
-                    <p class="day-title" style="color: var(--cyan);">Miércoles 28/01 (Hoy)</p>
-                    <span class="badge badge-deficit">Déficit</span>
+            <div class="accordion">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <h3>Miércoles 28/01 (Hoy)</h3>
+                    <span class="badge-status deficit">Déficit</span>
                 </div>
-                <p class="details">Entrenamiento H1 completado. Ingesta récord de <span class="protein-tag">148g de proteína</span>.</p>
+                <div class="accordion-content" style="max-height: 500px;"> <!-- Abierto por defecto para hoy -->
+                    <div class="content-inner">
+                        <p><strong>Desayuno:</strong> 2 huevos, adobera, cottage y café.</p>
+                        <p><strong>Comida:</strong> Sándwich de pavo real, masa madre y tocino.</p>
+                        <p><strong>Cena:</strong> 300g de Vacío con ensalada.</p>
+                        <p><strong>Entrenamiento:</strong> H1 Completado.</p>
+                        <p class="protein-highlight">Récord de Proteína: 148g.</p>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <footer class="footer">
-            <p>Objetivo: Desinflamación de amígdala y entrenamiento P1 mañana.</p>
-            <p style="color: var(--cyan);">Enfoque: Grasas saludables y líquidos al tiempo.</p>
+        <footer>
+            <p>Monitoreo de Grasa Visceral | 68.2 kg | Músculo: 28.6 kg</p>
         </footer>
     </div>
+
+    <script>
+        function toggleAccordion(element) {
+            const content = element.nextElementSibling;
+            if (content.style.maxHeight) {
+                content.style.maxHeight = null;
+            } else {
+                content.style.maxHeight = content.scrollHeight + "px";
+            }
+        }
+
+        // Configuración de la Gráfica
+        const ctx = document.getElementById('weeklyChart').getContext('2d');
+        const weeklyChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Sáb', 'Dom', 'Lun', 'Mar', 'Mié'],
+                datasets: [
+                    {
+                        label: 'Proteína (g)',
+                        data: [100, 80, 114, 114, 148],
+                        backgroundColor: 'rgba(0, 255, 255, 0.6)',
+                        borderColor: '#00ffff',
+                        borderWidth: 1,
+                        yAxisID: 'y',
+                        borderRadius: 5
+                    },
+                    {
+                        label: 'Calorías (kcal)',
+                        data: [2300, 1800, 2105, 1900, 1710],
+                        type: 'line',
+                        borderColor: '#0047ab',
+                        backgroundColor: 'rgba(0, 71, 171, 0.2)',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#40e0d0',
+                        fill: true,
+                        yAxisID: 'y1',
+                        tension: 0.4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        position: 'left',
+                        title: { display: true, text: 'Gramos (P)', color: '#00ffff' },
+                        grid: { color: 'rgba(255,255,255,0.05)' },
+                        ticks: { color: '#8b949e' }
+                    },
+                    y1: {
+                        beginAtZero: false,
+                        position: 'right',
+                        title: { display: true, text: 'Calorías', color: '#0047ab' },
+                        grid: { drawOnChartArea: false },
+                        ticks: { color: '#8b949e' }
+                    },
+                    x: {
+                        ticks: { color: '#8b949e' }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: { color: '#f0f6fc' }
+                    }
+                }
+            }
+        });
+    </script>
 </body>
 </html>
