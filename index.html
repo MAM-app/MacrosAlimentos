@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Fitness Avanzado</title>
+    <title>Dashboard Fitness - Rumbo a P1</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
@@ -15,8 +15,8 @@
             --cyan: #00ffff;
             --text-main: #f0f6fc;
             --text-dim: #8b949e;
-            --trained-bg: rgba(0, 255, 255, 0.1);
-            --rest-bg: rgba(139, 148, 158, 0.1);
+            --warning: #ffcc00;
+            --danger: #ff4444;
         }
 
         body {
@@ -29,19 +29,16 @@
             justify-content: center;
         }
 
-        .container {
-            width: 100%;
-            max-width: 800px;
-        }
+        .container { width: 100%; max-width: 850px; }
 
         header {
             text-align: center;
-            margin-bottom: 30px;
-            padding: 20px;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
             border-bottom: 2px solid var(--cobalto);
         }
 
-        h1 { color: var(--cyan); margin: 0; text-transform: uppercase; letter-spacing: 2px; }
+        h1 { color: var(--cyan); margin: 0; text-transform: uppercase; letter-spacing: 2px; font-size: 1.6rem; }
 
         .chart-container {
             background: var(--card-bg);
@@ -49,10 +46,8 @@
             border-radius: 15px;
             border: 1px solid var(--cobalto);
             margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
 
-        /* Accordion Styles */
         .accordion {
             width: 100%;
             margin-bottom: 12px;
@@ -71,34 +66,19 @@
             transition: background 0.3s;
         }
 
-        .accordion-header:hover {
-            background: rgba(0, 71, 171, 0.15);
-        }
-
-        .header-main-info h3 {
-            margin: 0;
-            font-size: 1.1rem;
-            color: var(--text-main);
-        }
-
-        .header-sub-info {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
+        .accordion-header:hover { background: rgba(0, 71, 171, 0.15); }
 
         .accordion-content {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: max-height 0.4s ease-out;
             background: rgba(5, 7, 10, 0.4);
         }
 
-        /* Detail Grid inside Accordion */
         .meal-grid {
             padding: 20px;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 15px;
             border-top: 1px solid var(--cobalto);
         }
@@ -112,37 +92,26 @@
 
         .meal-card h4 {
             margin: 0 0 8px 0;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             text-transform: uppercase;
             color: var(--turquesa);
-            letter-spacing: 1px;
         }
 
-        .meal-card p {
-            margin: 0;
-            font-size: 0.9rem;
-            line-height: 1.4;
-            color: var(--text-main);
-        }
-
-        /* Status Badges */
         .badge {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             padding: 4px 10px;
             border-radius: 6px;
             font-weight: bold;
             text-transform: uppercase;
         }
 
-        .badge-trained { background: var(--trained-bg); color: var(--cyan); border: 1px solid var(--cyan); }
-        .badge-rest { background: var(--rest-bg); color: var(--text-dim); border: 1px solid var(--text-dim); }
-        .badge-deficit { background: rgba(64, 224, 208, 0.1); color: var(--turquesa); }
+        .badge-trained { background: rgba(0, 255, 255, 0.1); color: var(--cyan); border: 1px solid var(--cyan); }
+        .badge-warning { background: rgba(255, 204, 0, 0.1); color: var(--warning); border: 1px solid var(--warning); }
 
-        .protein-summary {
-            margin-top: 10px;
-            padding: 10px 20px;
+        .summary-bar {
+            padding: 12px 20px;
             background: rgba(0, 255, 255, 0.05);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             display: flex;
             justify-content: space-between;
             color: var(--cyan);
@@ -150,19 +119,18 @@
         }
 
         footer {
-            margin-top: 40px;
+            margin-top: 30px;
             text-align: center;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: var(--text-dim);
-            padding-bottom: 30px;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Análisis de Rendimiento</h1>
-            <p style="color: var(--turquesa);">Historial Detallado y Balance de Macros</p>
+            <h1>Seguimiento de Rendimiento</h1>
+            <p style="color: var(--turquesa);">Viernes 30: Box & Cardio | Sábado 31: Objetivo P1</p>
         </header>
 
         <div class="chart-container">
@@ -170,235 +138,102 @@
         </div>
 
         <div id="history">
-            <!-- Sábado -->
+            <!-- VIERNES 30 -->
             <div class="accordion">
                 <div class="accordion-header" onclick="toggleAccordion(this)">
-                    <div class="header-main-info">
-                        <h3>Sábado 24/01</h3>
-                    </div>
-                    <div class="header-sub-info">
-                        <span class="badge badge-trained">💪 Entrenó (E1)</span>
-                        <span class="badge badge-deficit">Déficit</span>
-                    </div>
-                </div>
-                <div class="accordion-content">
-                    <div class="meal-grid">
-                        <div class="meal-card">
-                            <h4>Desayuno</h4>
-                            <p>Huevos con aguacate y café negro.</p>
-                        </div>
-                        <div class="meal-card">
-                            <h4>Comida</h4>
-                            <p>Pollo a la plancha con mix de verduras al vapor.</p>
-                        </div>
-                        <div class="meal-card">
-                            <h4>Cena</h4>
-                            <p>Ligera por inicio de malestar (Gripa).</p>
-                        </div>
-                    </div>
-                    <div class="protein-summary">
-                        <span>Proteína Estimada: ~100g</span>
-                        <span>Calorías: ~2,300 kcal</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Domingo -->
-            <div class="accordion">
-                <div class="accordion-header" onclick="toggleAccordion(this)">
-                    <div class="header-main-info">
-                        <h3>Domingo 25/01</h3>
-                    </div>
-                    <div class="header-sub-info">
-                        <span class="badge badge-rest">😴 Descanso</span>
-                        <span class="badge badge-deficit">Déficit</span>
-                    </div>
-                </div>
-                <div class="accordion-content">
-                    <div class="meal-grid">
-                        <div class="meal-card">
-                            <h4>Nutrición</h4>
-                            <p>Ingesta reducida por malestar físico intenso e infección.</p>
-                        </div>
-                    </div>
-                    <div class="protein-summary">
-                        <span>Proteína Estimada: ~80g</span>
-                        <span>Calorías: ~1,800 kcal</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Lunes -->
-            <div class="accordion">
-                <div class="accordion-header" onclick="toggleAccordion(this)">
-                    <div class="header-main-info">
-                        <h3>Lunes 26/01</h3>
-                    </div>
-                    <div class="header-sub-info">
-                        <span class="badge badge-rest">😴 Descanso</span>
-                        <span style="color: var(--azul-rey); border: 1px solid var(--azul-rey);" class="badge">Recuperación</span>
-                    </div>
-                </div>
-                <div class="accordion-content">
-                    <div class="meal-grid">
-                        <div class="meal-card">
-                            <h4>Alimentación</h4>
-                            <p>Incremento calórico para recuperación del sistema inmune.</p>
-                        </div>
-                        <div class="meal-card">
-                            <h4>Cena</h4>
-                            <p>Corte de carne magra para carga proteica.</p>
-                        </div>
-                    </div>
-                    <div class="protein-summary">
-                        <span>Proteína: 114g</span>
-                        <span>Calorías: 2,105 kcal</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Martes -->
-            <div class="accordion">
-                <div class="accordion-header" onclick="toggleAccordion(this)">
-                    <div class="header-main-info">
-                        <h3>Martes 27/01</h3>
-                    </div>
-                    <div class="header-sub-info">
-                        <span class="badge badge-rest">😴 Descanso</span>
-                        <span class="badge" style="border: 1px solid var(--text-dim);">Mantenimiento</span>
-                    </div>
-                </div>
-                <div class="accordion-content">
-                    <div class="meal-grid">
-                        <div class="meal-card">
-                            <h4>Comidas</h4>
-                            <p>Dieta balanceada centrada en hidratación.</p>
-                        </div>
-                        <div class="meal-card">
-                            <h4>Cena</h4>
-                            <p>Yogur griego con salvado para fibra y proteína.</p>
-                        </div>
-                    </div>
-                    <div class="protein-summary">
-                        <span>Proteína: 114g</span>
-                        <span>Calorías: 1,900 kcal</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Miércoles -->
-            <div class="accordion">
-                <div class="accordion-header" onclick="toggleAccordion(this)">
-                    <div class="header-main-info">
-                        <h3>Miércoles 28/01 (Hoy)</h3>
-                    </div>
-                    <div class="header-sub-info">
-                        <span class="badge badge-trained">💪 Entrenó (H1)</span>
-                        <span class="badge badge-deficit">Déficit</span>
+                    <h3>Viernes 30/01 (Hoy)</h3>
+                    <div style="display: flex; gap: 5px;">
+                        <span class="badge badge-trained">Box + Cardio</span>
+                        <span class="badge badge-warning">Tos Residual</span>
                     </div>
                 </div>
                 <div class="accordion-content" id="today-content">
                     <div class="meal-grid">
                         <div class="meal-card">
                             <h4>Desayuno</h4>
-                            <p>2 huevos, 30g queso adobera, 3 cdas cottage, café.</p>
+                            <p>2 huevos, espinacas, queso cottage, agua y leche.</p>
                         </div>
                         <div class="meal-card">
                             <h4>Comida</h4>
-                            <p>Sándwich de pechuga de pavo real, masa madre, aguacate, tocino y pepinillos.</p>
+                            <p>Botana: 160g camarón cocido y encurtido.</p>
                         </div>
                         <div class="meal-card">
                             <h4>Cena</h4>
-                            <p>300g Vacío con ensalada de lechuga y jitomate.</p>
+                            <p>2 tamales (Carga de carbohidratos/grasas).</p>
                         </div>
                     </div>
-                    <div class="protein-summary" style="background: rgba(0, 255, 255, 0.15);">
-                        <strong style="color: var(--cyan);">Récord Proteína: 148g</strong>
-                        <strong style="color: var(--cyan);">Calorías: 1,710 kcal</strong>
+                    <div class="summary-bar">
+                        <span>Proteína: ~70g</span>
+                        <span>Foco: Recuperación Activa</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- JUEVES 29 -->
+            <div class="accordion">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <h3>Jueves 29/01</h3>
+                    <span class="badge" style="color: var(--text-dim);">Descanso</span>
+                </div>
+                <div class="accordion-content">
+                    <div class="meal-grid">
+                        <div class="meal-card">
+                            <h4>Comida</h4>
+                            <p>2 latas atún, papa al vapor, 2/3 taza arroz, jitomate.</p>
+                        </div>
+                        <div class="meal-card">
+                            <h4>Cena</h4>
+                            <p>Burrito carne y frijol + Yogur Griego.</p>
+                        </div>
+                    </div>
+                    <div class="summary-bar">
+                        <span>Proteína: 107g</span>
+                        <span>Kcal: 1,160</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MIÉRCOLES 28 -->
+            <div class="accordion">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <h3>Miércoles 28/01</h3>
+                    <span class="badge badge-trained">H1: Tracción</span>
+                </div>
+                <div class="accordion-content">
+                    <div class="summary-bar">
+                        <span>Proteína: 148g 🔥</span>
+                        <span>Cena: 300g Vacío</span>
                     </div>
                 </div>
             </div>
         </div>
 
         <footer>
-            <p>Estatura: 1.63m | Peso: 68.2kg | Músculo: 28.6kg</p>
-            <p style="color: var(--turquesa);">Objetivo: Reducción de Grasa Visceral</p>
+            <p>Mañana: Entrenamiento de Pierna (P1) - Enfoque en volumen e intensidad.</p>
         </footer>
     </div>
 
     <script>
         function toggleAccordion(element) {
             const content = element.nextElementSibling;
-            const allContent = document.querySelectorAll('.accordion-content');
-            
-            allContent.forEach(item => {
-                if (item !== content) item.style.maxHeight = null;
-            });
-
-            if (content.style.maxHeight) {
-                content.style.maxHeight = null;
-            } else {
-                content.style.maxHeight = content.scrollHeight + "px";
-            }
+            if (content.style.maxHeight) { content.style.maxHeight = null; } 
+            else { content.style.maxHeight = content.scrollHeight + "px"; }
         }
-
-        // Abrir el día de hoy por defecto al cargar
         window.onload = () => {
             const today = document.getElementById('today-content');
             today.style.maxHeight = today.scrollHeight + "px";
         };
-
         const ctx = document.getElementById('weeklyChart').getContext('2d');
         new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: ['Sáb', 'Dom', 'Lun', 'Mar', 'Mié'],
+                labels: ['Mar', 'Mié', 'Jue', 'Vie'],
                 datasets: [
-                    {
-                        label: 'Proteína (g)',
-                        data: [100, 80, 114, 114, 148],
-                        backgroundColor: 'rgba(0, 255, 255, 0.6)',
-                        borderColor: '#00ffff',
-                        borderWidth: 1,
-                        yAxisID: 'y',
-                        borderRadius: 5
-                    },
-                    {
-                        label: 'Calorías (kcal)',
-                        data: [2300, 1800, 2105, 1900, 1710],
-                        type: 'line',
-                        borderColor: '#0047ab',
-                        backgroundColor: 'rgba(0, 71, 171, 0.2)',
-                        borderWidth: 3,
-                        pointBackgroundColor: '#40e0d0',
-                        fill: true,
-                        yAxisID: 'y1',
-                        tension: 0.4
-                    }
+                    { label: 'Proteína (g)', data: [114, 148, 107, 70], backgroundColor: '#00ffff' },
+                    { label: 'Kcal', data: [1900, 1710, 1160, 1080], type: 'line', borderColor: '#0047ab', tension: 0.3 }
                 ]
             },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        title: { display: true, text: 'Gramos Proteína', color: '#00ffff' },
-                        grid: { color: 'rgba(255,255,255,0.05)' },
-                        ticks: { color: '#8b949e' }
-                    },
-                    y1: {
-                        beginAtZero: false,
-                        position: 'right',
-                        title: { display: true, text: 'Calorías Totales', color: '#0047ab' },
-                        grid: { drawOnChartArea: false },
-                        ticks: { color: '#8b949e' }
-                    },
-                    x: { ticks: { color: '#8b949e' } }
-                },
-                plugins: {
-                    legend: { labels: { color: '#f0f6fc' } }
-                }
-            }
+            options: { scales: { y: { beginAtZero: true } } }
         });
     </script>
 </body>
